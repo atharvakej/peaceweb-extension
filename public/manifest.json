@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "My Chrome Extension",
+  "version": "1.0",
+  "description": "Sample Chrome Extension",
+  "permissions": ["activeTab", "webNavigation"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["style.css"]
+    }
+  ],
+  "icons": {
+    "16": "images/vite.svg",
+    "48": "images/vite.svg",
+    "128": "images/vite.svg"
+  }
+}
