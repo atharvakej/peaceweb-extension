@@ -1,5 +1,5 @@
 const filter = {
-  url: [{ urlMatches: "https://www.google.com/" }],
+  url: [{ urlMatches: "<all_urls>" }],
 };
 
 chrome.webNavigation.onCompleted.addListener(() => {
