@@ -25,16 +25,26 @@ function isHidden(element) {
   return style.display === "none" || style.visibility === "hidden";
 }
 
-const getData = async () => {
+const getData = async (text) => {
   try {
-    const res = "";
-    console.log(res);
+    const res = await fetch("http://127.0.0.1:8000/predict", {
+      method: "POST",
+      body: JSON.stringify({
+        text1: text,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const result = await res.json();
+    console.log(result);
+    return result;
   } catch (error) {
     console.log(error);
   }
 };
 
-document.addEventListener("DOMContentLoaded", function () {
+const showOverlay = async () => {
   const body = document.body;
 
   if (body) {
@@ -50,6 +60,15 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="loader"></div>
     </div>
     `;
+    const overlayHTMLWarning = `
+    <div class="overlay-content" >
+      <h1>Peace Web</h1>
+      <div class="overlay-warning" >
+        <img src="https://img.icons8.com/ios-filled/100/FA5252/error--v1.png" alt="" />
+        <p>Abusive language found</p>
+      </div>
+    </div>
+    `;
     overlay.innerHTML = overlayHTML;
     // overlay.innerHTML = "<p>Checking for any foul content...</p>";
     // const loadingMessage = overlay.querySelector("p");
@@ -57,9 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const rootElement = document.body;
     const visibleText = extractVisibleText(rootElement);
-    console.log(visibleText);
+    const res = await getData(visibleText);
+    console.log(res, "res");
+    if (res?.prediction === "1") overlay.innerHTML = overlayHTMLWarning;
+    else document.body.removeChild(overlay);
 
     // const pageHTML = document.documentElement.outerHTML;
     // console.log(pageHTML);
   }
-});
+};
+
+document.addEventListener("DOMContentLoaded", showOverlay);

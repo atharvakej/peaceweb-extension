@@ -17,8 +17,8 @@
     }
   ],
   "icons": {
-    "16": "images/vite.svg",
-    "48": "images/vite.svg",
-    "128": "images/vite.svg"
+    "16": "peace-web.png",
+    "48": "peace-web.png",
+    "128": "peace-web.png"
   }
 }

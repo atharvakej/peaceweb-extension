@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "My Chrome Extension",
+  "name": "Peace Web",
   "version": "1.0",
-  "description": "Sample Chrome Extension",
+  "description": "Chrome extension to block abusive and obscure language",
   "permissions": ["activeTab", "webNavigation"],
   "background": {
     "service_worker": "background.js"
@@ -17,17 +17,17 @@
     }
   ],
   "action": {
-    "default_title": "My extension",
+    "default_title": "Peace Web",
     "default_popup": "index.html",
     "default_icon": {
-      "16": "images/vite.svg",
-      "48": "images/vite.svg",
-      "128": "images/vite.svg"
+      "16": "peace-web.png",
+      "48": "peace-web.png",
+      "128": "peace-web.png"
     }
   },
   "icons": {
-    "16": "images/vite.svg",
-    "48": "images/vite.svg",
-    "128": "images/vite.svg"
+    "16": "peace-web.png",
+    "48": "peace-web.png",
+    "128": "peace-web.png"
   }
 }
