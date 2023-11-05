@@ -7,5 +7,5 @@ Created on Tue Nov 17 21:51:19 2020
 # import string
 from pydantic import BaseModel
 # 2. Class which describes Bank Notes measurements
-class BankNote(BaseModel):
+class Speech(BaseModel):
     text1 : str

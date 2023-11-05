@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 17 21:40:41 2020
-
-@author: win10
-"""
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 import re
@@ -21,41 +15,22 @@ ps = PorterStemmer()
 # 1. Library imports
 import uvicorn
 from fastapi import FastAPI
-from BankNotes import BankNote
+from Speeches import Speech
 import numpy as np
 import pickle
 import string
 import pandas as pd
+from fastapi.middleware.cors import CORSMiddleware
 # 2. Create the app object
 app = FastAPI()
-pickle_in = open("classifier.pkl","rb")
-classifier=pickle.load(pickle_in)
 
-def transform_text(text):
-    text = text.lower()
-    text = nltk.word_tokenize(text)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    y = []
-    for i in text:
-        if i.isalnum():
-            y.append(i)
-
-    text = y[:]
-    y.clear()
-
-    for i in text:
-        if i not in stopwords.words('english') and i not in string.punctuation:
-            y.append(i)
-
-    text = y[:]
-    y.clear()
-
-    for i in text:
-        y.append(ps.stem(i))
-
-    return " ".join(y)
-
-# 3. Index route, opens automatically on http://127.0.0.1:8000
 @app.get('/')
 def index():
     return {'message': 'Hello, World'}
@@ -83,38 +58,24 @@ def clean(text):
 
 tfidf = pickle.load(open('vectorizer.pkl','rb'))
 model = pickle.load(open('model.pkl','rb'))
-cv = CountVectorizer()
 
-# 3. Expose the prediction functionality, make a prediction from the passed
-#    JSON data and return the predicted Bank Note with the confidence
 @app.post('/predict')
-def predict_banknote(data:BankNote):
-
+def predict_banknote(data:Speech):
     data = data.dict()
     text=data['text1']
+    text = clean(text)
+    vector = tfidf.transform([text]).toarray()
+    result = model.predict(vector)[0]
+    print(type(result))
+    pr = str(result)
 
-
-    # up_text = cv.transform([text]).toarray()
-    # prediction = model.predict(up_text)
-
-#     skewness=data['skewness']
-#     curtosis=data['curtosis']
-#     entropy=data['entropy']
-#    # print(classifier.predict([[variance,skewness,curtosis,entropy]]))
-    # prediction = classifier.predict([[variance,skewness,curtosis,entropy]])
-    # if(prediction[0] == 1):
-    #     prediction="Fake note"
-    # else:
-    #     prediction="Its a Bank note"
-    # print(data)
-    # print("printing")
     return {
-        'prediction': text
+        'prediction': pr
     }
 
-# 5. Run the API with uvicorn
-#    Will run on http://127.0.0.1:8000
+
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)
     
+#activate myenv
 #uvicorn app:app --reload
